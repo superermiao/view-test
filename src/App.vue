@@ -7,7 +7,7 @@
   <!-- <router-view/> -->
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref, getCurrentInstance } from 'vue'
+import { defineComponent, reactive, ref, getCurrentInstance, h } from 'vue'
 
 export default defineComponent({
   setup () {
@@ -30,6 +30,7 @@ export default defineComponent({
       ]
     })
     const showVisible = () => {
+      console.log('visible===', visible.value)
       visible.value = true
     }
     const confirm = instance.appContext.config.globalProperties.$confirm
@@ -37,8 +38,8 @@ export default defineComponent({
       confirm({ title: '确定表单内容吗?', formData: form.formData, formItems: form.formItems }).then((data) => {
         console.log('确定', data)
         alert('提交成功')
-      }).catch((e) => {
-        console.log('取消', e)
+      }).catch(() => {
+        console.log('取消')
       })
     }
     const confirmForm = (data) => {

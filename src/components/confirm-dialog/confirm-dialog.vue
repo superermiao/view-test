@@ -1,5 +1,5 @@
 <template>
-  <teleport to="body" :disabled="!appendToBody">
+  <teleport to="body" :disabled="!isAppendToBody">
     <div v-if="visible" class="popup-background">
       <div class="popup-container">
         <div class="popup-header">

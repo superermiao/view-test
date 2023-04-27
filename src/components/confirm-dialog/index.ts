@@ -1,13 +1,15 @@
 import ConfirmDialog from '@/components/confirm-dialog/confirm-dialog.vue'
-import { App, VNode, h, render } from 'vue'
+import { App, VNode, h, render, isVNode } from 'vue'
 interface ConfirmOptions {
   title?: string,
-  message?: VNode | (() => VNode),
+  message?: VNode,
   formData?: Record<string, unknown>,
-  formItems?: Array<unknown>
+  formItems?: Array<unknown>,
+  footer?: VNode
 }
 const ConfirmPlugin = {
   install: (app: App) => {
+    app.component('ConfirmDialog', ConfirmDialog)
     app.config.globalProperties.$confirm = async (options: ConfirmOptions): Promise<void> => {
       return new Promise((resolve, reject) => {
         const container = document.createElement('div')
@@ -18,7 +20,10 @@ const ConfirmPlugin = {
           isAppendToBody: false,
           onConfirm: (data) => { resolve(data); onClose() },
           onCancel: () => { reject(new Error('')); onClose() }
-        })
+        }, [
+          options.message && isVNode(options.message) ? options.message : null,
+          options.message && isVNode(options.footer) ? options.footer : null
+        ])
         render(boxVNode, container)
         document.body.appendChild(container)
         const onClose = () => {
